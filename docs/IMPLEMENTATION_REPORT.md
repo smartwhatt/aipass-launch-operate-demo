@@ -9,6 +9,7 @@ gates are blocked. See "Remaining work" for the exact conditions.
 |---|---|
 | Repository | https://github.com/smartwhatt/aipass-launch-operate-demo |
 | Application tags | `app-v1.0.0` (EP1 baseline), `app-v1.0.1` (corrected) |
+| Release URLs | https://github.com/smartwhatt/aipass-launch-operate-demo/releases/tag/app-v1.0.0 and .../app-v1.0.1 |
 | Preview URL | none. Vercel access is blocked. |
 | Production sandbox URL | none. Vercel access is blocked. |
 | Workbook | `public/downloads/AIPASS_AI_App_Cost_Calculator_v1.xlsx` |
@@ -34,15 +35,17 @@ Each command ran in the repository root on 24 October 2026 (Asia/Bangkok).
 | Handoff validator | `python3 tools/validate_handoff.py` | 0 | source hashes and 40 slots pass |
 | Lint | `npm run lint` | 0 | clean |
 | Type check | `npm run typecheck` | 0 | clean |
-| Unit tests | `npm test` | 0 | 52 passed |
+| Unit tests | `npm test` | 0 | 55 passed |
 | Integration tests | `npm run test:integration` | 0 | 33 passed |
-| End-to-end tests | `npm run test:e2e` | 0 | 10 passed |
+| End-to-end tests | `npm run test:e2e` | 0 | 11 passed |
 | Fixture evaluation, docs-v2 | `npm run eval -- --mode fixture` | 0 | 10/10, critical 5/5, gate PASS |
 | Fixture evaluation, docs-v1 | `npm run eval -- --mode fixture --target docs-v1` | 0 | 10/10, critical 5/5, gate PASS |
 | Live evaluation | `npm run eval -- --mode live` | 2 | **BLOCKED** — price unverified, no key |
 | Workbook formulas | `npm run calculator:check` | 0 | 473 assertions, 0 failed |
 | Workbook build | `npm run calculator:build` | 0 | same SHA on two builds |
 | Production build | `npm run build` | 0 | 27 dynamic routes plus the proxy |
+| Development server | `npm run dev` | 0 | `/login` 200, `/` 200, `/api/health` ready at v1.0.1 |
+| Release assets | `gh release download app-v1.0.1` | 0 | workbook SHA-256 matches the app bytes |
 | Release gate | `npm run release:check` | 0 | 12/12 checks |
 | Distribution ZIP | `npm run release:zip` | 0 | `release/SHA256SUMS` |
 | Database migrations | `npm run db:migrate` | 0 | 1 migration applied |
