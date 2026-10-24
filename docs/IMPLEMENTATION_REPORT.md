@@ -82,13 +82,16 @@ Each command ran in the repository root on 24 October 2026 (Asia/Bangkok).
 
 ## What changed between the two app tags
 
-`app-v1.0.1` adds one reviewable application change: a handbook-freshness notice
-on the home page. The page compares the document behind the active index with the
+`app-v1.0.1` adds two reviewable application changes: a handbook-freshness notice
+on the home page and a checked-handbook fallback link for incident-paused answers. The page compares the document behind the active index with the
 newest registered document. When they differ, it names both versions and links to
 the newest section 2.1. The pilot sees the warning before an old answer misleads
 them, and the admin gets a link to the index controls. The rule lives in
 `lib/state/freshness.ts`, is unit-tested, and is covered by a Playwright test
-with a screenshot. Endpoint behavior and stable IDs are unchanged.
+with a screenshot. The incident pause now returns a server-built `fallback_url`
+for the newest registered handbook, so the answer card's button does not send a
+learner back to the stale version. An integration test and an E2E test cover it.
+Endpoint behavior and stable IDs are unchanged.
 
 ## Video coverage
 
@@ -156,8 +159,13 @@ slots: 20 PASS, 6 PARTIAL, 14 BLOCKED.
 documentation commit on `main` does not change those tags. Check a tag with
 `git rev-parse app-v1.0.1^{commit}`.
 
+`app-v1.0.1` was re-cut before distribution, a few minutes after the first push.
+The first cut lacked the checked-handbook fallback link for incident-paused
+answers. The tag, the release assets, and `SHA256SUMS` now describe the same
+commit (`3d44b4a`). No learner received the first cut.
+
 | Tag | Commit | Date |
 |---|---|---|
 | `handoff-v1.0.0` | `1659a57` | 24 October 2026 |
 | `app-v1.0.0` | `6660ab8` | 24 October 2026 |
-| `app-v1.0.1` | `8764862` | 24 October 2026 |
+| `app-v1.0.1` | `3d44b4a` | 24 October 2026 |
