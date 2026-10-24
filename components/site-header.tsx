@@ -68,6 +68,12 @@ export function SiteHeader({
             ข้อมูลสมมติสำหรับการเรียน
           </span>
         </div>
+
+        {config.APP_ENV === "preview" ? (
+          <p className="preview-ribbon">
+            Preview build · ยังไม่ใช่ Production · ตรวจคำถาม รุ่นคู่มือ และสิทธิ์ก่อน promote
+          </p>
+        ) : null}
       </div>
     </header>
   );
