@@ -12,7 +12,7 @@ implementation spec asks for.
 
 | Area | State | Evidence |
 |---|---|---|
-| App (EP1 baseline) | Works locally | 55 unit, 33 integration, 11 Playwright tests pass |
+| App (EP1 baseline) | Works locally | 55 unit, 34 integration, 12 Playwright tests pass |
 | Corpus and index | Two versions, immutable indexes | `npm run index:build` / `index:activate` |
 | Controls (rate, quota, budget) | Enforced in PostgreSQL transactions | parallel-request tests pass |
 | Fixture evaluation | 10/10 (docs-v2) and 10/10 (docs-v1) | `npm run eval -- --mode fixture` |

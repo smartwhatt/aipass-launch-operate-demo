@@ -169,6 +169,23 @@ describe("budget reservation", () => {
   });
 });
 
+describe("incident pause", () => {
+  it("stops opening-hours answers and points at the checked handbook", async () => {
+    await applyTestScenario("ep3-incident");
+    await clearRateCounters();
+
+    const paused = await ask("ศูนย์เปิดกี่โมง");
+    expect(paused.body.status).toBe("provider_unavailable");
+    expect(paused.body.citations).toEqual([]);
+    expect(paused.body.fallback_url).toBe("/handbook/docs-v2#s2-1");
+    expect(String(paused.body.answer)).toContain("หยุดตอบ");
+
+    await clearRateCounters();
+    const other = await ask("ติดต่อเจ้าหน้าที่ได้ที่ไหน");
+    expect(other.body.status).toBe("ok");
+  });
+});
+
 describe("historical dashboard", () => {
   it("reports exactly 200 requests, p95 9s, and THB 28.84", async () => {
     await applyTestScenario("ep3-stale-index");

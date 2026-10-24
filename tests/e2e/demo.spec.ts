@@ -73,9 +73,10 @@ test("the recorded trace DEMO-R042 keeps its old answer and versions", async ({ 
   await page.screenshot({ path: path.join(SHOTS, "trace-demo-r042.png"), fullPage: true });
 });
 
-test("admin runs the fixture evaluation and passes the gate", async ({ page }) => {
+test("admin runs the fixture evaluation against docs-v2 and passes the gate", async ({ page }) => {
   await login(page, "admin");
   await page.goto("/admin/evaluations");
+  await page.getByLabel("ดัชนีเป้าหมาย").selectOption("docs-v2");
   await page.getByRole("button", { name: "รัน Q01–Q10" }).click();
   await expect(page.getByText("ผ่านเกณฑ์").first()).toBeVisible({ timeout: 30_000 });
   await expect(page.getByText("10/10").first()).toBeVisible();
@@ -96,4 +97,22 @@ test("the calculator mirrors the workbook numbers", async ({ page }) => {
   await expect(page.getByText("15,750.00").first()).toBeVisible();
   await expect(page.getByText("2,044.00").first()).toBeVisible();
   await page.screenshot({ path: path.join(SHOTS, "calculator.png"), fullPage: true });
+});
+
+test("the incident banner pauses opening-hours answers and points at docs-v2", async ({ page }) => {
+  await login(page, "admin");
+  await resetScenario(page, "ep3-incident");
+  await page.goto("/");
+  await expect(page.getByText("หยุดตอบอัตโนมัติบางหัวข้อชั่วคราว")).toBeVisible();
+
+  await ask(page, "ศูนย์เปิดกี่โมง");
+  await expect(page.getByText(/หยุดตอบคำถามเรื่องวันและเวลาเปิดบริการ/)).toBeVisible();
+  await expect(page.getByRole("link", { name: "เปิดคู่มือที่ตรวจสอบแล้ว" })).toHaveAttribute(
+    "href",
+    "/handbook/docs-v2#s2-1",
+  );
+  await page.screenshot({ path: path.join(SHOTS, "incident-pause.png"), fullPage: true });
+
+  // Leave the suite in the baseline state for any later test or project.
+  await resetScenario(page, "ep1-baseline");
 });

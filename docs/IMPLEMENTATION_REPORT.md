@@ -36,8 +36,8 @@ Each command ran in the repository root on 24 October 2026 (Asia/Bangkok).
 | Lint | `npm run lint` | 0 | clean |
 | Type check | `npm run typecheck` | 0 | clean |
 | Unit tests | `npm test` | 0 | 55 passed |
-| Integration tests | `npm run test:integration` | 0 | 33 passed |
-| End-to-end tests | `npm run test:e2e` | 0 | 11 passed |
+| Integration tests | `npm run test:integration` | 0 | 34 passed |
+| End-to-end tests | `npm run test:e2e` | 0 | 12 passed |
 | Fixture evaluation, docs-v2 | `npm run eval -- --mode fixture` | 0 | 10/10, critical 5/5, gate PASS |
 | Fixture evaluation, docs-v1 | `npm run eval -- --mode fixture --target docs-v1` | 0 | 10/10, critical 5/5, gate PASS |
 | Live evaluation | `npm run eval -- --mode live` | 2 | **BLOCKED** — price unverified, no key |
@@ -72,6 +72,10 @@ Each command ran in the repository root on 24 October 2026 (Asia/Bangkok).
 - **Stale index**: registering `docs-v2` leaves `index-v1` active. Activating
   `index-v2` changes new answers from 09:00–16:00 to 08:30–16:30 and leaves the
   recorded `DEMO-R042` trace unchanged.
+- **Incident pause**: in incident mode an opening-hours question returns
+  `provider_unavailable`, cites nothing, and carries a server-built
+  `fallback_url` of `/handbook/docs-v2#s2-1`. Other handbook questions still
+  answer.
 - **Workbook**: the real formulas recalculate to 1,890 / 15,750 / 2,044 / 350
   and the doubled exchange rate case. Cached values, protection without a
   password, and data validation are all asserted.
