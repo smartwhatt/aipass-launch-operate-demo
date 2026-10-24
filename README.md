@@ -137,6 +137,9 @@ artifacts/      generated evidence (gitignored)
   the same remaining budget.
 - **Citations are built by the server.** The model may choose a section ID from
   the retrieved set, never a URL.
+- **v1.0.1 adds a handbook-freshness notice.** When a newer document is
+  registered but not active, the home page says so before a learner sees an old
+  answer. That is the reviewer-visible change between the two app tags.
 
 ## Documentation
 

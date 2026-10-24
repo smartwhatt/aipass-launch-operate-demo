@@ -6,6 +6,7 @@ import { formatThaiDate, formatThaiDateTime } from "@/lib/format";
 import { QuestionForm } from "@/components/question-form";
 import { IncidentBanner } from "@/components/incident-banner";
 import { ContactPanel } from "@/components/contact-panel";
+import { handbookFreshness } from "@/lib/state/freshness";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,9 @@ export default async function HomePage() {
   const quota =
     canAsk && viewer ? await getQuotaStatus(config.DATA_NAMESPACE, viewer.id) : null;
 
+  // Catching a stale index before a learner does is the point of the EP3 fix.
+  const freshness = handbookFreshness(active?.index?.docKey, active?.latestDocKey);
+
   return (
     <div className="page">
       <section className="hero">
@@ -42,6 +46,27 @@ export default async function HomePage() {
       {active?.incident.enabled ? (
         <div style={{ marginBottom: "2rem" }}>
           <IncidentBanner incident={active.incident} checkedHandbookHref={checkedDocHref} />
+        </div>
+      ) : null}
+
+      {freshness.stale ? (
+        <div className="notice notice--warn" style={{ marginBottom: "2rem" }}>
+          <div className="notice__title">คู่มือฉบับล่าสุดยังไม่ถูกใช้ตอบ</div>
+          <p className="small">
+            ระบบลงทะเบียน <span className="mono">{freshness.latestDocKey}</span> แล้ว แต่ยังตอบจาก{" "}
+            <span className="mono">{freshness.activeDocKey}</span> — ถ้าคำตอบเรื่องเวลาเปิด–ปิดไม่ตรง
+            ให้เปิดคู่มือฉบับล่าสุดหรือแจ้งผู้ดูแลระบบ
+          </p>
+          <p className="row small" style={{ marginTop: "0.6rem", gap: "0.6rem" }}>
+            <Link className="button button--ghost button--sm" href={`/handbook/${freshness.latestDocKey}#s2-1`} prefetch={false}>
+              เปิดคู่มือฉบับล่าสุด
+            </Link>
+            {isAdmin ? (
+              <Link className="button button--quiet button--sm" href="/admin/demo">
+                สร้างและเปิดใช้ดัชนีใหม่
+              </Link>
+            ) : null}
+          </p>
         </div>
       ) : null}
 

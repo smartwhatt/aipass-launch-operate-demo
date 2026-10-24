@@ -1,6 +1,6 @@
 {
   "name": "aipass-launch-operate-demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "ถามคู่มือ — ศูนย์บริการตัวอย่าง: Thai handbook Q&A demo for the AIPASS Launch & Operate course",
   "engines": {

@@ -47,7 +47,6 @@ export default defineConfig({
       DATA_NAMESPACE: "aipass-e2e",
       DEMO_CONTROLS_ENABLED: "true",
       AI_MODE: "fixture",
-      APP_VERSION: "1.0.0",
     },
   },
 });

@@ -73,6 +73,16 @@ Each command ran in the repository root on 24 October 2026 (Asia/Bangkok).
   and the doubled exchange rate case. Cached values, protection without a
   password, and data validation are all asserted.
 
+## What changed between the two app tags
+
+`app-v1.0.1` adds one reviewable application change: a handbook-freshness notice
+on the home page. The page compares the document behind the active index with the
+newest registered document. When they differ, it names both versions and links to
+the newest section 2.1. The pilot sees the warning before an old answer misleads
+them, and the admin gets a link to the index controls. The rule lives in
+`lib/state/freshness.ts`, is unit-tested, and is covered by a Playwright test
+with a screenshot. Endpoint behavior and stable IDs are unchanged.
+
 ## Video coverage
 
 [docs/VIDEO_RESULTS.md](VIDEO_RESULTS.md) gives one result for each of the 40

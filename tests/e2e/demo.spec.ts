@@ -53,6 +53,16 @@ test("admin resets the stale-index scenario and sees the historical dashboard", 
   await page.screenshot({ path: path.join(SHOTS, "dashboard.png"), fullPage: true });
 });
 
+test("the home page warns that the newest handbook is not the active one", async ({ page }) => {
+  await login(page, "pilot");
+  await expect(page.getByText("คู่มือฉบับล่าสุดยังไม่ถูกใช้ตอบ")).toBeVisible();
+  await expect(page.getByRole("link", { name: "เปิดคู่มือฉบับล่าสุด" })).toHaveAttribute(
+    "href",
+    "/handbook/docs-v2#s2-1",
+  );
+  await page.screenshot({ path: path.join(SHOTS, "stale-handbook-notice.png"), fullPage: true });
+});
+
 test("the recorded trace DEMO-R042 keeps its old answer and versions", async ({ page }) => {
   await login(page, "admin");
   await page.goto("/admin/traces/DEMO-R042");

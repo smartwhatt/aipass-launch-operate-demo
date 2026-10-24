@@ -16,7 +16,10 @@ export default async function globalSetup() {
     process.env.SESSION_SECRET ?? "e2e-secret-0123456789abcdef0123456789abcdef";
   process.env.AI_MODE = "fixture";
   process.env.DEMO_CONTROLS_ENABLED = "true";
-  process.env.APP_VERSION = "1.0.0";
+  const pkg = JSON.parse(
+    (await import("node:fs")).readFileSync("package.json", "utf8"),
+  ) as { version: string };
+  process.env.APP_VERSION = pkg.version;
 
   const { getDb, getSql } = await import("../../lib/db/client");
   const { runMigrations } = await import("../../lib/db/migrate");
@@ -33,7 +36,7 @@ export default async function globalSetup() {
     scenario: "ep1-baseline",
     namespace: process.env.DATA_NAMESPACE,
     actor: "playwright-setup",
-    appVersion: "1.0.0",
+    appVersion: pkg.version,
     appEnv: "local",
     controlsEnabled: true,
   });
