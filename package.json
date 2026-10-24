@@ -1,0 +1,58 @@
+{
+  "name": "aipass-launch-operate-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ถามคู่มือ — ศูนย์บริการตัวอย่าง: Thai handbook Q&A demo for the AIPASS Launch & Operate course",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config vitest.config.ts tests/unit",
+    "test:integration": "vitest run --config vitest.config.ts tests/integration",
+    "test:e2e": "playwright test",
+    "db:migrate": "tsx tools/db-migrate.ts",
+    "db:local:start": "tsx tools/db-local.ts start",
+    "db:local:stop": "tsx tools/db-local.ts stop",
+    "db:local:status": "tsx tools/db-local.ts status",
+    "setup": "tsx tools/setup.ts",
+    "demo:seed": "tsx tools/demo-seed.ts",
+    "demo:reset": "tsx tools/demo-reset.ts",
+    "index:build": "tsx tools/index-build.ts",
+    "index:activate": "tsx tools/index-activate.ts",
+    "eval": "tsx tools/eval.ts",
+    "calculator:build": "tsx tools/calculator-build.ts",
+    "calculator:check": "tsx tools/calculator-check.ts",
+    "release:check": "tsx tools/release-check.ts",
+    "release:zip": "tsx tools/release-zip.ts",
+    "validate:handoff": "python3 tools/validate_handoff.py"
+  },
+  "dependencies": {
+    "@google/genai": "2.31.0",
+    "bcryptjs": "3.0.3",
+    "drizzle-orm": "0.45.4",
+    "next": "16.4.3",
+    "postgres": "3.4.9",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "dotenv": "18.0.9",
+    "drizzle-kit": "0.31.11",
+    "eslint": "10.13.0",
+    "eslint-config-next": "16.4.3",
+    "exceljs": "4.4.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.5"
+  }
+}

@@ -1,43 +1,76 @@
 # Repository distribution
 
-## Current handoff release
+## Release channels
 
-The repository contains the English specification, Thai source snapshots, fictional assets, and a handoff validator.
+| Channel | Contents |
+|---|---|
+| `handoff-v1.0.0` | the original specification package |
+| `app-v1.0.0` | runnable baseline application for EP1 |
+| `app-v1.0.1` | corrected application for EP3, with the handbook-freshness notice |
+| `demo-update` | the branch used for the EP1 Preview exercise |
+| `main` | ongoing development |
 
-The tag `handoff-v1.0.0` identifies this package. Its ZIP can move between AI-agent environments without Google Drive access. The app and workbook still require implementation.
+Each release from `app-v1.0.0` onward carries:
 
-Private repository permissions also protect its release assets. The owner must grant access or share the downloaded ZIP with the recipient.
+- the application source ZIP,
+- the workbook `AIPASS_AI_App_Cost_Calculator_v1.xlsx`,
+- a `SHA256SUMS` file for both archives,
+- the setup guide, the recording runbook, and the implementation report.
 
-## Template use
+## Learner paths
 
-Select **Use this template** to create a separate repository. A template copies content and structure. It does not copy deployment secrets, connected databases, Vercel settings, or learner access.
+| Path | Use |
+|---|---|
+| **Use this template** | start an independent repository; no secrets, database, or Vercel settings come with it |
+| clone | keep the history and the tags |
+| source ZIP from the release | hand the complete package to another machine or agent |
+| tagged release | pin the app tag that matches the lesson |
+| workbook download | open the same bytes that the app serves |
 
-The recipient must generate new credentials and use an isolated database/namespace. Do not reuse the instructor's environment.
+Pin every example to a tag. Example:
 
-## Required application release
+```sh
+git clone --branch app-v1.0.0 https://github.com/smartwhatt/aipass-launch-operate-demo
+```
 
-After implementation, publish these assets from one checked commit:
+## Workbook
 
-- Application source ZIP and version tag.
-- The offline workbook, with its version and SHA-256.
-- English and Thai setup instructions.
-- Recording runbook and scenario resets.
-- Implementation report with actual evidence.
+The release and the app must serve the same bytes.
 
-Serve the same workbook bytes from the app and the tagged release. The download must remain available when no AI provider key is set.
+| Field | Value |
+|---|---|
+| File | `AIPASS_AI_App_Cost_Calculator_v1.xlsx` |
+| Bytes | 17,020 |
+| SHA-256 | `68db1fbfea331a41dcaee6aac6cef39117386ff4b5809edfe5972ddb1a11d86b` |
+| Checksum file | `docs/WORKBOOK_SHA256.txt` and `release/SHA256SUMS` |
 
-Use these release channels:
+Verify after download:
 
-- `handoff-v1.0.0`: specification package.
-- `app-v1.0.0`: actual baseline application for EP1.
-- `app-v1.0.1`: actual corrected application for EP3.
+```sh
+shasum -a 256 AIPASS_AI_App_Cost_Calculator_v1.xlsx
+```
 
-Keep `demo-update` for the Preview exercise. Do not use a branch name as a substitute for a tested release tag.
+Link one workbook under EP2 in the LMS. Do not upload several workbooks with
+different formulas under the same filename.
 
-## Before learner distribution
+## Before you give a learner access
 
-Check the template, clone, ZIP, and workbook paths from a learner account. Remove secrets, local accounts, real traces, and unrelated files.
+1. Create a separate database and a separate `DATA_NAMESPACE`.
+2. Set `DEMO_CONTROLS_ENABLED=false` for a general learner deployment.
+3. Run `npm run setup -- --rotate` and keep the account file out of any share.
+4. Run `npm run release:check`.
+5. Confirm `npm run calculator:check` passes.
+6. Check the template, the clone, the ZIP, and the download from a learner
+   account.
+7. Keep the repository private until the owner chooses otherwise.
 
-Check the license and visibility with the owner before public distribution. Keep course scripts and external reference materials under their existing rights.
+## Visibility and rights
 
-Use one release as the LMS source. Do not upload several workbooks with different formulas under the same filename.
+The repository starts private. Making a learner release public needs an explicit
+choice by the owner. The course scripts and external reference material keep
+their existing rights. This package does not publish external example documents.
+
+## What the ZIP excludes
+
+`.git`, `node_modules`, `.next`, `.vercel`, `.env*`, `local-accounts*`,
+`artifacts/`, `release/`, local database clusters, tool caches, and logs.

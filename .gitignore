@@ -10,5 +10,17 @@ playwright-report/
 test-results/
 local-accounts*
 *.log
+*.tsbuildinfo
 __pycache__/
 .DS_Store
+
+# Local development database cluster (see npm run db:local:start)
+.pgdata/
+.pgsocket/
+
+# Tooling and caches used by setup on a machine without Docker
+.tools/
+.cache/
+
+# Release output
+release/

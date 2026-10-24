@@ -1,0 +1,30 @@
+# Local PostgreSQL for development.
+#
+#   docker compose up -d
+#   cp .env.example .env.local   # DATABASE_URL already matches this service
+#   npm run db:migrate
+#
+# The hosted setup uses Neon PostgreSQL instead (one database or branch per
+# environment). See docs/SETUP.md.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: aipass-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aipass_local
+      TZ: Asia/Bangkok
+    ports:
+      - "5432:5432"
+    volumes:
+      - aipass-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aipass_local"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  aipass-pgdata:
