@@ -1,0 +1,76 @@
+{
+  "common": {
+    "fictional": true,
+    "rate_per_60_seconds": 5,
+    "daily_quota": 20,
+    "timezone": "Asia/Bangkok",
+    "teaching_budget_thb": 1000,
+    "reset_requires_admin": true
+  },
+  "scenarios": [
+    {
+      "id": "ep1-baseline",
+      "required_app_version": "1.0.0",
+      "latest_document": "docs-v1",
+      "active_index": "index-v1",
+      "mode": "normal"
+    },
+    {
+      "id": "ep2-quota",
+      "required_app_version": "1.0.0",
+      "active_index": "index-v1",
+      "used_questions_today": 19,
+      "mode": "normal"
+    },
+    {
+      "id": "ep2-budget-warning",
+      "required_app_version": "1.0.0",
+      "spent_thb": 800,
+      "mode": "normal"
+    },
+    {
+      "id": "ep2-budget-full",
+      "required_app_version": "1.0.0",
+      "spent_thb": 1000,
+      "mode": "normal"
+    },
+    {
+      "id": "ep2-provider-failure",
+      "required_app_version": "1.0.0",
+      "spent_thb": 0,
+      "used_questions_today": 0,
+      "mode": "provider_failure"
+    },
+    {
+      "id": "ep3-stale-index",
+      "required_app_version": "1.0.0",
+      "latest_document": "docs-v2",
+      "active_index": "index-v1",
+      "mode": "stale_index"
+    },
+    {
+      "id": "ep3-incident",
+      "required_app_version": "1.0.0",
+      "latest_document": "docs-v2",
+      "active_index": "index-v1",
+      "mode": "incident",
+      "pause_topic": "opening_hours"
+    },
+    {
+      "id": "ep3-fixed-preview",
+      "required_app_version": "1.0.1",
+      "latest_document": "docs-v2",
+      "active_index": "index-v2",
+      "mode": "normal",
+      "environment": "preview"
+    },
+    {
+      "id": "ep3-fixed-production",
+      "required_app_version": "1.0.1",
+      "latest_document": "docs-v2",
+      "active_index": "index-v2",
+      "mode": "normal",
+      "environment": "production"
+    }
+  ]
+}

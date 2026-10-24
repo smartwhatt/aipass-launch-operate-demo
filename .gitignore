@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.vercel/
+.env
+.env.*
+!.env.example
+artifacts/
+coverage/
+playwright-report/
+test-results/
+local-accounts*
+*.log
+__pycache__/
+.DS_Store

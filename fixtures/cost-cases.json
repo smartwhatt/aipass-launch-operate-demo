@@ -1,0 +1,60 @@
+{
+  "fictional_prices": true,
+  "currency": "THB",
+  "shared": {
+    "questions_per_user_day": 5,
+    "days_per_month": 22,
+    "input_tokens": 1500,
+    "output_tokens": 500,
+    "input_usd_per_million": 1,
+    "output_usd_per_million": 5,
+    "thb_per_usd": 35,
+    "hosting_thb_month": 300,
+    "domain_thb_year": 600,
+    "other_variable_thb_question": 0,
+    "other_fixed_thb_month": 0,
+    "contingency_fraction": 0
+  },
+  "cases": [
+    {
+      "id": "baseline",
+      "users": 100,
+      "calls_per_question": 1,
+      "questions": 11000,
+      "model_calls": 11000,
+      "model_cost_thb": 1540,
+      "fixed_cost_thb": 350,
+      "total_thb": 1890
+    },
+    {
+      "id": "more_users",
+      "users": 1000,
+      "calls_per_question": 1,
+      "questions": 110000,
+      "model_calls": 110000,
+      "model_cost_thb": 15400,
+      "fixed_cost_thb": 350,
+      "total_thb": 15750
+    },
+    {
+      "id": "retry",
+      "users": 100,
+      "calls_per_question": 1.1,
+      "questions": 11000,
+      "model_calls": 12100,
+      "model_cost_thb": 1694,
+      "fixed_cost_thb": 350,
+      "total_thb": 2044
+    },
+    {
+      "id": "zero_users",
+      "users": 0,
+      "calls_per_question": 1,
+      "questions": 0,
+      "model_calls": 0,
+      "model_cost_thb": 0,
+      "fixed_cost_thb": 350,
+      "total_thb": 350
+    }
+  ]
+}

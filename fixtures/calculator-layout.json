@@ -1,0 +1,48 @@
+{
+  "filename": "AIPASS_AI_App_Cost_Calculator_v1.xlsx",
+  "sheets": [
+    "Start",
+    "Inputs",
+    "Scenarios",
+    "Checks"
+  ],
+  "input_defaults": {
+    "B2": 100,
+    "B3": 5,
+    "B4": 22,
+    "B5": 1,
+    "B6": 1500,
+    "B7": 500,
+    "B8": 1,
+    "B9": 5,
+    "B10": 35,
+    "B11": 300,
+    "B12": 600,
+    "B13": 0,
+    "B14": 0,
+    "B15": 0
+  },
+  "scenario_columns": {
+    "B": "baseline",
+    "C": "more_users",
+    "D": "retry"
+  },
+  "baseline_formulas": {
+    "B7": "=B2*B3*B4",
+    "B8": "=B7*B5",
+    "B9": "=(Inputs!$B$6*Inputs!$B$8+Inputs!$B$7*Inputs!$B$9)/1000000*Inputs!$B$10",
+    "B10": "=B5*B9+Inputs!$B$13",
+    "B11": "=B7*B10",
+    "B12": "=Inputs!$B$11+Inputs!$B$12/12+Inputs!$B$14",
+    "B13": "=B11+B12",
+    "B14": "=B13*Inputs!$B$15",
+    "B15": "=B13+B14",
+    "B16": "=IF(B7=0,0,B15/B7)"
+  },
+  "other_rows": {
+    "B17": "pricing label",
+    "B18": "price source",
+    "B19": "price checked date",
+    "B20": "exclusions"
+  }
+}

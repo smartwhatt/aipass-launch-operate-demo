@@ -1,0 +1,39 @@
+{
+  "captured_on": "2026-10-24",
+  "scripts_are_teaching_authority": true,
+  "sources": [
+    {
+      "key": "ep1",
+      "path": "docs/sources/ep1.th.md",
+      "url": "https://docs.google.com/document/d/1ot68OrK8gwaXfW2ymjl_cGEN2GfAEXVaf3LHUcVDxBo/edit",
+      "revision": "AHj4eMRuZgSUdbMYL774k2tWZgLsBdkv8ybb7yR5fCGpy5lOuIOMWUwYAiYI-Cjba6COefQs4tyzkLHnReWruKr5rBNrsYlSlgH92m6jWgk",
+      "sha256": "8e547c87d07660f96a2764ede1b7b34187bcd1852c40a8577753010eabd23811",
+      "authority": "current recording script"
+    },
+    {
+      "key": "ep2",
+      "path": "docs/sources/ep2.th.md",
+      "url": "https://docs.google.com/document/d/1lBIZRfIDOYwn3F7AAu6sr8Py11T7TtmWg4irnGs2d3g/edit",
+      "revision": "AHj4eMSfC9SVJILI6iZaHQOEKVabKiOrJ1MGgqDMVBhQ3qi-j9w-GHENXXyomVM8wcX6aTXetFjG2V_gaDh2pzvq9wyaoAtHQfCigFEQOG4",
+      "sha256": "a8a69f0489bb65e2f92ef6dac64544e64444946463e1493b2331931f58c3f4ce",
+      "authority": "current recording script"
+    },
+    {
+      "key": "ep3",
+      "path": "docs/sources/ep3.th.md",
+      "url": "https://docs.google.com/document/d/1ixsuU-8h_cqe-8A3RSoC0QBYHs07Bs0D_UU7ggrlcmI/edit",
+      "revision": "AHj4eMRXIno2Of45jx3ESC_leoBEfwfYN7ochwfteQ_wo8Qb0koDp-4F6qYWlCj4u3dGMG-qAf5QDfdB4Nzf3kx2d3TySnMpN_pLJiETSQU",
+      "sha256": "1820730371afc0a1689a13b092d4a563ab1113470699dad1acb1fab4732abea6",
+      "authority": "current recording script"
+    },
+    {
+      "key": "guide",
+      "path": "docs/sources/legacy-demo-guide.th.md",
+      "url": "https://docs.google.com/document/d/1hQJslRNC2tJwrfAMJMAo9Na3a5LZkr5cGEEWQVTkpWM/edit",
+      "revision": "AHj4eMQ2FEF8sg7fUUut7MwfHDQDth7fjEcTlwfvRtgcUY1k7OD6rysEbdjK5E6zn4Xk8WfSBlsR0LRNIMu7g46pqrT0Tzz7-V-aEgStUA0",
+      "sha256": "907034201ad12442bc85052e6a32b0cda368bdbce6e085cf5bbe7d9d07d50688",
+      "authority": "legacy guide, superseded by IMPLEMENTATION_SPEC.md",
+      "archived_native_url": "https://docs.google.com/document/d/1TbG-SXIoNsiTX122ygLWqnY9AnE4Z-lDwaVuIPeHBQs/edit"
+    }
+  ]
+}

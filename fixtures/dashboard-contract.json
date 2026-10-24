@@ -1,0 +1,18 @@
+{
+  "fictional": true,
+  "users": 20,
+  "working_days": 5,
+  "requests": 200,
+  "success": 194,
+  "errors": 6,
+  "insufficient_info": 40,
+  "feedback": 24,
+  "needs_correction": 8,
+  "p95_ms": 9000,
+  "p95_method": "nearest-rank",
+  "model_calls": 206,
+  "estimated_cost_thb": "28.84",
+  "historical_trace": "DEMO-R042",
+  "period_start": "2026-10-12",
+  "period_end": "2026-10-16"
+}
