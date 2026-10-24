@@ -145,8 +145,12 @@ slots: 20 PASS, 6 PARTIAL, 14 BLOCKED.
 
 ## Published tags
 
+`app-v1.0.0` and `app-v1.0.1` point at the two release commits. Any later
+documentation commit on `main` does not change those tags. Check a tag with
+`git rev-parse app-v1.0.1^{commit}`.
+
 | Tag | Commit | Date |
 |---|---|---|
 | `handoff-v1.0.0` | `1659a57` | 24 October 2026 |
-| `app-v1.0.0` | filled from the published tag | 24 October 2026 |
-| `app-v1.0.1` | filled from the published tag | 24 October 2026 |
+| `app-v1.0.0` | `6660ab8` | 24 October 2026 |
+| `app-v1.0.1` | `8764862` | 24 October 2026 |
