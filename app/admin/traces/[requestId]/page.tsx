@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { desc, eq } from "drizzle-orm";
 import { getConfig } from "@/lib/config";
 import { getDb } from "@/lib/db/client";
+import { requests } from "@/lib/db/schema";
 import { requireAdminPage } from "@/lib/auth/guards";
 import { getTrace } from "@/lib/telemetry/requests";
 import { getActiveContext } from "@/lib/state/active";
@@ -9,6 +10,7 @@ import { getCanonicalDocument, sectionAnchor } from "@/lib/retrieval/canonical";
 import { formatThaiDateTime, STATUS_LABELS } from "@/lib/format";
 import { StatusBadge } from "@/components/status-badge";
 import { CitationList } from "@/components/citation-list";
+import { ActionButton } from "@/components/admin/action-button";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +24,100 @@ export default async function TracePage({
   const config = getConfig();
   const db = getDb();
   const trace = await getTrace(db, config.DATA_NAMESPACE, decodeURIComponent(requestId));
-  if (!trace) notFound();
+
+  if (!trace) {
+    const recent = await db
+      .select({
+        requestId: requests.requestId,
+        dataset: requests.dataset,
+        status: requests.status,
+        createdAt: requests.createdAt,
+      })
+      .from(requests)
+      .where(eq(requests.namespace, config.DATA_NAMESPACE))
+      .orderBy(desc(requests.createdAt))
+      .limit(6);
+
+    return (
+      <div className="stack stack-lg">
+        <div>
+          <Link className="tiny" href="/admin/dashboard" prefetch={false}>
+            ← กลับแดชบอร์ด
+          </Link>
+          <h2 className="mono" style={{ marginTop: "0.4rem", fontSize: "1.25rem" }}>
+            {decodeURIComponent(requestId)}
+          </h2>
+        </div>
+
+        <div className="notice notice--warn">
+          <div className="notice__title">ไม่พบคำขอนี้ในฐานข้อมูลของสภาพแวดล้อมนี้</div>
+          <p className="small">
+            ร่องรอยจะถูกเก็บเมื่อคำขอถูกบันทึกไว้แล้วเท่านั้น คำขอตัวอย่างอย่าง{" "}
+            <span className="mono">DEMO-R042</span> มาจากชุดข้อมูล pilot ย้อนหลัง
+            ซึ่งโหลดด้วยสถานการณ์ <span className="mono">ep3-stale-index</span> หรือ{" "}
+            <span className="mono">ep3-incident</span> สถานการณ์ปัจจุบันยังไม่โหลดชุดนั้น
+          </p>
+          <div className="row" style={{ marginTop: "0.9rem", gap: "0.6rem" }}>
+            <ActionButton
+              label="โหลดชุดข้อมูลตัวอย่าง"
+              confirmLabel="ยืนยันการโหลด"
+              endpoint="/api/admin/scenarios/reset"
+              body={{ scenario: "ep3-stale-index" }}
+              variant="primary"
+              size="sm"
+            />
+            <Link className="button button--ghost button--sm" href="/admin/demo">
+              เลือกสถานการณ์เอง
+            </Link>
+          </div>
+        </div>
+
+        <section>
+          <h3 className="card__kicker" style={{ letterSpacing: "0.08em", marginBottom: "0.6rem" }}>
+            คำขอล่าสุดในชุดข้อมูลนี้
+          </h3>
+          {recent.length === 0 ? (
+            <p className="small muted">
+              ยังไม่มีคำขอในสภาพแวดล้อมนี้ เริ่มจากหน้าถามคำตอบหรือโหลดชุดข้อมูลตัวอย่าง
+            </p>
+          ) : (
+            <div className="table-wrap">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>คำขอ</th>
+                    <th>ชุดข้อมูล</th>
+                    <th>สถานะ</th>
+                    <th>เมื่อ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recent.map((row) => (
+                    <tr key={row.requestId}>
+                      <td>
+                        <Link
+                          className="mono tiny"
+                          href={`/admin/traces/${encodeURIComponent(row.requestId)}`}
+                          prefetch={false}
+                        >
+                          {row.requestId}
+                        </Link>
+                      </td>
+                      <td className="mono tiny">{row.dataset}</td>
+                      <td>
+                        <StatusBadge status={row.status} />
+                      </td>
+                      <td className="tiny nowrap">{formatThaiDateTime(row.createdAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+      </div>
+    );
+  }
 
   const active = await getActiveContext(db, config.DATA_NAMESPACE);
   const { request, calls, spans, actorName } = trace;

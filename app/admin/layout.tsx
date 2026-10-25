@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { and, eq } from "drizzle-orm";
+import { getDb } from "@/lib/db/client";
+import { requests } from "@/lib/db/schema";
 import { getShell } from "@/lib/shell";
 import { AdminTabs } from "@/components/admin/tabs";
 import { environmentLabel } from "@/lib/config";
@@ -28,6 +31,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     );
   }
 
+  const sampleTrace = await getDb()
+    .select({ id: requests.id })
+    .from(requests)
+    .where(
+      and(
+        eq(requests.namespace, config.DATA_NAMESPACE),
+        eq(requests.requestId, "DEMO-R042"),
+      ),
+    )
+    .limit(1);
+
   return (
     <div className="page">
       <div className="admin-head">
@@ -45,7 +59,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="badge badge--warn">ปิดการควบคุมการสาธิต</span>
           )}
         </div>
-        <AdminTabs />
+        <AdminTabs hasSampleTrace={sampleTrace.length > 0} />
       </div>
       {children}
     </div>

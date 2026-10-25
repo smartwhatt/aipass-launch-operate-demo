@@ -10,7 +10,7 @@ const TABS = [
   { href: "/admin/releases", label: "รุ่นที่เผยแพร่" },
 ];
 
-export function AdminTabs() {
+export function AdminTabs({ hasSampleTrace = false }: { hasSampleTrace?: boolean }) {
   const pathname = usePathname();
   return (
     <nav className="tabs" aria-label="เมนูผู้ดูแลระบบ">
@@ -24,13 +24,15 @@ export function AdminTabs() {
           {tab.label}
         </Link>
       ))}
-      <Link
-        href="/admin/traces/DEMO-R042"
-        prefetch={false}
-        aria-current={pathname.startsWith("/admin/traces") ? "page" : undefined}
-      >
-        ร่องรอยตัวอย่าง
-      </Link>
+      {hasSampleTrace ? (
+        <Link
+          href="/admin/traces/DEMO-R042"
+          prefetch={false}
+          aria-current={pathname.startsWith("/admin/traces") ? "page" : undefined}
+        >
+          ร่องรอยตัวอย่าง
+        </Link>
+      ) : null}
     </nav>
   );
 }

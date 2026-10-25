@@ -118,3 +118,13 @@ test("the incident banner pauses opening-hours answers and points at docs-v2", a
   // Leave the suite in the baseline state for any later test or project.
   await resetScenario(page, "ep1-baseline");
 });
+
+test("a missing trace explains how to load the sample dataset", async ({ page }) => {
+  await login(page, "admin");
+  await page.goto("/admin/traces/DEMO-R042");
+  await expect(page.getByText("ไม่พบคำขอนี้ในฐานข้อมูลของสภาพแวดล้อมนี้")).toBeVisible();
+  await expect(page.getByRole("button", { name: "โหลดชุดข้อมูลตัวอย่าง" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "ไปแดชบอร์ด" }).or(
+    page.getByRole("link", { name: "กลับแดชบอร์ด" }),
+  )).toBeVisible();
+});
