@@ -174,13 +174,19 @@ slots: 20 PASS, 6 PARTIAL, 14 BLOCKED.
 documentation commit on `main` does not change those tags. Check a tag with
 `git rev-parse app-v1.0.1^{commit}`.
 
-`app-v1.0.1` was re-cut before distribution, a few minutes after the first push.
-The first cut lacked the checked-handbook fallback link for incident-paused
-answers. The tag, the release assets, and `SHA256SUMS` now describe the same
-commit (`3d44b4a`). No learner received the first cut.
+Both tags were re-cut on 25 October 2026, before distribution. The first cuts
+carried the earlier header and answer wording. The current tags point at:
+
+- `app-v1.0.0` = `1a8af2f`: the EP1 baseline with the learner wording pass and
+  **without** the 1.0.1 corrections.
+- `app-v1.0.1` = `f0ba760`: the same interface plus the freshness notice, the
+  checked-handbook fallback, and the missing-trace explanation.
+
+The release assets and `SHA256SUMS` were rebuilt from these commits. No learner
+received an earlier cut. Treat these as the final app tags.
 
 | Tag | Commit | Date |
 |---|---|---|
 | `handoff-v1.0.0` | `1659a57` | 24 October 2026 |
-| `app-v1.0.0` | `6660ab8` | 24 October 2026 |
-| `app-v1.0.1` | `3d44b4a` | 24 October 2026 |
+| `app-v1.0.0` | `1a8af2f` | 25 October 2026 (re-cut) |
+| `app-v1.0.1` | `f0ba760` | 25 October 2026 (re-cut) |
