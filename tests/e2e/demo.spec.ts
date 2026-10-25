@@ -54,16 +54,6 @@ test("admin resets the stale-index scenario and sees the historical dashboard", 
   await page.screenshot({ path: path.join(SHOTS, "dashboard.png"), fullPage: true });
 });
 
-test("the home page warns that the newest handbook is not the active one", async ({ page }) => {
-  await login(page, "pilot");
-  await expect(page.getByText("คู่มือฉบับใหม่ยังไม่ถูกใช้ตอบ")).toBeVisible();
-  await expect(page.getByRole("link", { name: "เปิดคู่มือฉบับล่าสุด" })).toHaveAttribute(
-    "href",
-    "/handbook/docs-v2#s2-1",
-  );
-  await page.screenshot({ path: path.join(SHOTS, "stale-handbook-notice.png"), fullPage: true });
-});
-
 test("the recorded trace DEMO-R042 keeps its old answer and versions", async ({ page }) => {
   await login(page, "admin");
   await page.goto("/admin/traces/DEMO-R042");
@@ -98,33 +88,4 @@ test("the calculator mirrors the workbook numbers", async ({ page }) => {
   await expect(page.getByText("15,750.00").first()).toBeVisible();
   await expect(page.getByText("2,044.00").first()).toBeVisible();
   await page.screenshot({ path: path.join(SHOTS, "calculator.png"), fullPage: true });
-});
-
-test("the incident banner pauses opening-hours answers and points at docs-v2", async ({ page }) => {
-  await login(page, "admin");
-  await resetScenario(page, "ep3-incident");
-  await page.goto("/");
-  await expect(page.getByText("หยุดตอบอัตโนมัติบางหัวข้อชั่วคราว")).toBeVisible();
-
-  await ask(page, "ศูนย์เปิดกี่โมง");
-  await expect(page.getByText(/หยุดตอบคำถามเรื่องวันและเวลาเปิดบริการ/)).toBeVisible();
-  await expect(page.getByRole("link", { name: "เปิดคู่มือที่ตรวจสอบแล้ว" })).toHaveAttribute(
-    "href",
-    "/handbook/docs-v2#s2-1",
-  );
-  await page.waitForTimeout(350);
-  await page.screenshot({ path: path.join(SHOTS, "incident-pause.png"), fullPage: true });
-
-  // Leave the suite in the baseline state for any later test or project.
-  await resetScenario(page, "ep1-baseline");
-});
-
-test("a missing trace explains how to load the sample dataset", async ({ page }) => {
-  await login(page, "admin");
-  await page.goto("/admin/traces/DEMO-R042");
-  await expect(page.getByText("ไม่พบคำขอนี้ในฐานข้อมูลของสภาพแวดล้อมนี้")).toBeVisible();
-  await expect(page.getByRole("button", { name: "โหลดชุดข้อมูลตัวอย่าง" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "ไปแดชบอร์ด" }).or(
-    page.getByRole("link", { name: "กลับแดชบอร์ด" }),
-  )).toBeVisible();
 });

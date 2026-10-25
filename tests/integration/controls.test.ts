@@ -170,14 +170,13 @@ describe("budget reservation", () => {
 });
 
 describe("incident pause", () => {
-  it("stops opening-hours answers and points at the checked handbook", async () => {
+  it("stops opening-hours answers and keeps other questions working", async () => {
     await applyTestScenario("ep3-incident");
     await clearRateCounters();
 
     const paused = await ask("ศูนย์เปิดกี่โมง");
     expect(paused.body.status).toBe("provider_unavailable");
     expect(paused.body.citations).toEqual([]);
-    expect(paused.body.fallback_url).toBe("/handbook/docs-v2#s2-1");
     expect(String(paused.body.answer)).toContain("หยุดตอบ");
 
     await clearRateCounters();

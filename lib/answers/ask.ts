@@ -170,7 +170,6 @@ export async function askQuestion(input: AskInput): Promise<AskResult> {
         retry_at: null,
         explanation: "ฐานข้อมูลนี้ยังไม่มีดัชนีที่เปิดใช้ (active index)",
         next_action: "ผู้ดูแลระบบต้องรัน npm run demo:seed หรือเลือกดัชนีในหน้า /admin/demo",
-        fallback_url: "/",
       },
     };
   }
@@ -199,7 +198,6 @@ export async function askQuestion(input: AskInput): Promise<AskResult> {
         retry_at: null,
         explanation: selection.explanation,
         next_action: selection.nextAction,
-        fallback_url: fallbackUrlFor(active, active.incident.topic),
       },
     };
   }
@@ -249,7 +247,6 @@ export async function askQuestion(input: AskInput): Promise<AskResult> {
         retry_at: admission.retryAt?.toISOString() ?? null,
         explanation: admission.explanation,
         next_action: admission.nextAction,
-        fallback_url: fallbackUrlFor(active, active.incident.topic),
       },
     };
   }
@@ -332,7 +329,6 @@ export async function askQuestion(input: AskInput): Promise<AskResult> {
       retry_at: answer.retryAt?.toISOString() ?? null,
       explanation: answer.explanation || STATUS_ACTIONS[answer.status].explanation,
       next_action: answer.nextAction || STATUS_ACTIONS[answer.status].nextAction,
-      fallback_url: answer.fallbackUrl,
       request_url: `/admin/traces/${encodeURIComponent(row.requestId)}`,
     },
   };

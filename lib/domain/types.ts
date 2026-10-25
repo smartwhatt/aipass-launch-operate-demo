@@ -87,8 +87,6 @@ export type QuestionResponse = {
   retry_at?: string | null;
   explanation?: string;
   next_action?: string;
-  /** Server-built link to the handbook version an operator marked as checked. */
-  fallback_url?: string | null;
   request_url?: string;
 };
 

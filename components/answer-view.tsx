@@ -40,14 +40,7 @@ export function AnswerView({
   const tone = statusTone(response.status);
   const noticeClass =
     tone === "danger" ? "notice notice--danger" : tone === "warn" ? "notice notice--warn" : "notice";
-  // A citation wins. Otherwise the server's checked-handbook link wins over the
-  // page's default, which may be the stale active version during an incident.
-  const primaryHref = response.citations[0]?.url ?? response.fallback_url ?? handbookHref;
-  const primaryLabel = response.citations[0]
-    ? "ดูข้อความในคู่มือ"
-    : response.fallback_url
-      ? "เปิดคู่มือที่ตรวจสอบแล้ว"
-      : "เปิดคู่มือ";
+  const primaryHref = response.citations[0]?.url ?? handbookHref;
   const retryAt = response.retry_at ? formatThaiDateTime(response.retry_at) : null;
   const source = response.versions.handbook
     ? `ตอบจาก${handbookLabel(response.versions.handbook)}`
@@ -103,7 +96,7 @@ export function AnswerView({
 
       <div className="answer__actions">
         <Link className="button button--ghost" href={primaryHref} prefetch={false}>
-          {primaryLabel}
+          {response.citations[0] ? "ดูข้อความในคู่มือ" : "เปิดคู่มือ"}
         </Link>
         <ContactPanel />
         {showTraceLink && response.request_id && answerHref ? (

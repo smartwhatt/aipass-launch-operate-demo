@@ -2,11 +2,10 @@ import Link from "next/link";
 import { getShell } from "@/lib/shell";
 import { getQuotaStatus } from "@/lib/controls/admission";
 import { getCanonicalDocument, sectionAnchor } from "@/lib/retrieval/canonical";
-import { formatThaiDate, formatThaiDateTime, handbookLabel } from "@/lib/format";
+import { formatThaiDate, formatThaiDateTime } from "@/lib/format";
 import { QuestionForm } from "@/components/question-form";
 import { IncidentBanner } from "@/components/incident-banner";
 import { ContactPanel } from "@/components/contact-panel";
-import { handbookFreshness } from "@/lib/state/freshness";
 
 export const dynamic = "force-dynamic";
 
@@ -30,11 +29,6 @@ export default async function HomePage() {
     canAsk && viewer ? await getQuotaStatus(config.DATA_NAMESPACE, viewer.id) : null;
   const quotaIsTight = Boolean(quota && quota.remaining <= 5);
 
-  // Catching a stale index before a learner does is the point of the EP3 fix.
-  const freshness = handbookFreshness(active?.index?.docKey, active?.latestDocKey);
-  const latestDoc = freshness.latestDocKey
-    ? safeDocument(freshness.latestDocKey)
-    : null;
 
   return (
     <div className="page">
@@ -50,34 +44,6 @@ export default async function HomePage() {
       {active?.incident.enabled ? (
         <div style={{ marginBottom: "2rem" }}>
           <IncidentBanner incident={active.incident} checkedHandbookHref={checkedDocHref} />
-        </div>
-      ) : null}
-
-      {freshness.stale ? (
-        <div className="notice notice--warn" style={{ marginBottom: "2rem" }}>
-          <div className="notice__title">คู่มือฉบับใหม่ยังไม่ถูกใช้ตอบ</div>
-          <p className="small">
-            มี{handbookLabel(freshness.latestDocKey)}
-            {latestDoc
-              ? ` (มีผล ${formatThaiDate(`${latestDoc.effective_date}T00:00:00+07:00`)})`
-              : ""}{" "}
-            แล้ว แต่ระบบยังตอบจาก{handbookLabel(freshness.activeDocKey)} —
-            ถ้าคำตอบเรื่องเวลาเปิด–ปิดไม่ตรง ให้เปิดฉบับล่าสุดหรือแจ้งเจ้าหน้าที่
-          </p>
-          <p className="row small" style={{ marginTop: "0.6rem", gap: "0.6rem" }}>
-            <Link
-              className="button button--ghost button--sm"
-              href={`/handbook/${freshness.latestDocKey}#s2-1`}
-              prefetch={false}
-            >
-              เปิดคู่มือฉบับล่าสุด
-            </Link>
-            {isAdmin ? (
-              <Link className="button button--quiet button--sm" href="/admin/demo">
-                ไปหน้ากำหนดค่าคู่มือ
-              </Link>
-            ) : null}
-          </p>
         </div>
       ) : null}
 
@@ -162,12 +128,4 @@ export default async function HomePage() {
       </div>
     </div>
   );
-}
-
-function safeDocument(docKey: string) {
-  try {
-    return getCanonicalDocument(docKey);
-  } catch {
-    return null;
-  }
 }
