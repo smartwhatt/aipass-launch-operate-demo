@@ -15,10 +15,11 @@ test("pilot asks a question and opens the citation", async ({ page }) => {
 
   await ask(page, "ศูนย์เปิดกี่โมง");
   await expect(page.getByText("09:00–16:00").first()).toBeVisible();
-  await expect(page.locator(".answer").getByText("ข้อมูลจำลอง / Fixture mode")).toBeVisible();
+  await expect(page.locator(".answer").getByText("ข้อมูลจำลอง")).toBeVisible();
 
   const citation = page.getByRole("link", { name: /เปิดข้อนี้ในคู่มือ/ });
   await expect(citation).toHaveAttribute("href", "/handbook/docs-v1#s2-1");
+  await page.waitForTimeout(350); // let the answer fade-in finish before the evidence shot
   await page.screenshot({ path: path.join(SHOTS, "answer-with-citation.png"), fullPage: true });
 
   await citation.click();
@@ -36,7 +37,7 @@ test("pilot gets insufficient_info for an out-of-scope question", async ({ page 
 
 test("outsider is refused in the interface", async ({ page }) => {
   await login(page, "outsider");
-  await expect(page.getByText(/บัญชีผู้ใช้ภายนอกไม่ได้รับสิทธิ์/)).toBeVisible();
+  await expect(page.getByText(/บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้งานคู่มือบริการ/)).toBeVisible();
   await expect(page.getByRole("button", { name: "ส่งคำถาม" })).toHaveCount(0);
   await page.screenshot({ path: path.join(SHOTS, "outsider-blocked.png"), fullPage: true });
 });
@@ -55,7 +56,7 @@ test("admin resets the stale-index scenario and sees the historical dashboard", 
 
 test("the home page warns that the newest handbook is not the active one", async ({ page }) => {
   await login(page, "pilot");
-  await expect(page.getByText("คู่มือฉบับล่าสุดยังไม่ถูกใช้ตอบ")).toBeVisible();
+  await expect(page.getByText("คู่มือฉบับใหม่ยังไม่ถูกใช้ตอบ")).toBeVisible();
   await expect(page.getByRole("link", { name: "เปิดคู่มือฉบับล่าสุด" })).toHaveAttribute(
     "href",
     "/handbook/docs-v2#s2-1",
@@ -111,6 +112,7 @@ test("the incident banner pauses opening-hours answers and points at docs-v2", a
     "href",
     "/handbook/docs-v2#s2-1",
   );
+  await page.waitForTimeout(350);
   await page.screenshot({ path: path.join(SHOTS, "incident-pause.png"), fullPage: true });
 
   // Leave the suite in the baseline state for any later test or project.

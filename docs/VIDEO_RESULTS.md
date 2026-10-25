@@ -15,7 +15,7 @@ Evidence types: `test` (automated), `shot` (screenshot in `artifacts/screenshots
 | 2 | Tunnel / Static / Web app visuals | BLOCKED | needs teaching graphics; out of app scope |
 | 3 | Direct access / LINE / embed visuals | BLOCKED | needs teaching graphics; out of app scope |
 | 4 | Deployment visuals | BLOCKED | needs teaching graphics |
-| 5 | Environment labels and AiPASS chat | PARTIAL | `shot: home-pilot.png` shows Local, version, handbook, mode. AiPASS chat needs the instructor account (BLOCKED) |
+| 5 | Environment labels and AiPASS chat | PARTIAL | `shot: home-pilot.png` footer shows Local, version, handbook, mode; `/about` adds the full status block. AiPASS chat needs the instructor account (BLOCKED) |
 | 6 | GitHub repo and Vercel import | PARTIAL | repo is public to the owner and pushed; Vercel import BLOCKED (invalid CLI token) |
 | 7 | Vercel environment variables | BLOCKED | no Vercel access; variable list is in `docs/SETUP.md` |
 | 8 | Vercel Preview and app checks | PARTIAL | app checks PASS (`test: demo.spec.ts`); Preview URL BLOCKED |

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { QuestionResponse } from "@/lib/domain/types";
-import { formatThaiDateTime, STATUS_LABELS, statusTone } from "@/lib/format";
+import { formatThaiDateTime, handbookLabel, STATUS_LABELS, statusTone } from "@/lib/format";
 import { StatusBadge } from "@/components/status-badge";
 import { CitationList } from "@/components/citation-list";
 import { FeedbackButtons } from "@/components/feedback-buttons";
@@ -19,6 +19,9 @@ const BLOCKED = new Set([
  *
  * A wrong answer can still be a successful HTTP response: the status badge and
  * the answer text are separate pieces of information.
+ *
+ * Learner-facing wording: the source reads as an edition ("คู่มือฉบับที่ 1"),
+ * not as an internal key. The key stays in the API payload and the trace.
  */
 export function AnswerView({
   response,
@@ -41,20 +44,22 @@ export function AnswerView({
   // page's default, which may be the stale active version during an incident.
   const primaryHref = response.citations[0]?.url ?? response.fallback_url ?? handbookHref;
   const primaryLabel = response.citations[0]
-    ? "เปิดคู่มือที่อ้างอิง"
+    ? "ดูข้อความในคู่มือ"
     : response.fallback_url
       ? "เปิดคู่มือที่ตรวจสอบแล้ว"
       : "เปิดคู่มือ";
   const retryAt = response.retry_at ? formatThaiDateTime(response.retry_at) : null;
+  const source = response.versions.handbook
+    ? `ตอบจาก${handbookLabel(response.versions.handbook)}`
+    : null;
 
   return (
     <section className="answer" aria-live="polite" aria-label="คำตอบจากคู่มือ">
       <div className="answer__head">
         <StatusBadge status={response.status} />
         <span className="answer__label">
-          {response.mode === "fixture" ? "ข้อมูลจำลอง / Fixture mode" : "Live mode"}
-          {response.versions.handbook ? ` · ${response.versions.handbook}` : ""}
-          {response.versions.index ? ` · ${response.versions.index}` : ""}
+          {response.mode === "fixture" ? "ข้อมูลจำลอง" : "ข้อมูลจริง"}
+          {source ? ` · ${source}` : ""}
         </span>
       </div>
 
@@ -88,12 +93,13 @@ export function AnswerView({
 
       <CitationList citations={response.citations} />
 
-      <div className="answer__meta">
-        {response.request_id ? <span>คำขอ {response.request_id}</span> : null}
-        <span>แอป v{response.versions.app}</span>
-        <span>prompt {response.versions.prompt}</span>
-        {response.versions.model ? <span>model {response.versions.model}</span> : null}
-      </div>
+      {response.request_id ? (
+        <div className="answer__meta">
+          <span>
+            เลขที่คำขอ <span className="mono">{response.request_id}</span>
+          </span>
+        </div>
+      ) : null}
 
       <div className="answer__actions">
         <Link className="button button--ghost" href={primaryHref} prefetch={false}>

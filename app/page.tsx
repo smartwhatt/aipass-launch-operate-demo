@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getShell } from "@/lib/shell";
 import { getQuotaStatus } from "@/lib/controls/admission";
 import { getCanonicalDocument, sectionAnchor } from "@/lib/retrieval/canonical";
-import { formatThaiDate, formatThaiDateTime } from "@/lib/format";
+import { formatThaiDate, formatThaiDateTime, handbookLabel } from "@/lib/format";
 import { QuestionForm } from "@/components/question-form";
 import { IncidentBanner } from "@/components/incident-banner";
 import { ContactPanel } from "@/components/contact-panel";
@@ -16,9 +16,9 @@ export default async function HomePage() {
   const isAdmin = viewer?.role === "admin";
 
   const disabledReason = !viewer
-    ? "แอปนี้ต้องเข้าสู่ระบบก่อนถามคำถาม บัญชีสำหรับการสอนสร้างด้วย npm run setup"
+    ? "เข้าสู่ระบบเพื่อถามคำถามจากคู่มือบริการ"
     : viewer.role === "outsider"
-      ? "บัญชีผู้ใช้ภายนอกไม่ได้รับสิทธิ์ถามคำถามหรืออ่านคู่มือฉบับเต็ม ใช้บัญชีผู้ใช้ทดลองนำร่องสำหรับการสาธิต"
+      ? "บัญชีนี้ยังไม่ได้รับสิทธิ์ใช้งานคู่มือบริการ ติดต่อเจ้าหน้าที่ศูนย์เพื่อขอสิทธิ์"
       : null;
 
   const activeDocKey = active?.index?.docKey ?? null;
@@ -28,18 +28,22 @@ export default async function HomePage() {
 
   const quota =
     canAsk && viewer ? await getQuotaStatus(config.DATA_NAMESPACE, viewer.id) : null;
+  const quotaIsTight = Boolean(quota && quota.remaining <= 5);
 
   // Catching a stale index before a learner does is the point of the EP3 fix.
   const freshness = handbookFreshness(active?.index?.docKey, active?.latestDocKey);
+  const latestDoc = freshness.latestDocKey
+    ? safeDocument(freshness.latestDocKey)
+    : null;
 
   return (
     <div className="page">
       <section className="hero">
-        <p className="hero__eyebrow">ศูนย์บริการตัวอย่าง · ข้อมูลสมมติสำหรับการเรียน</p>
+        <p className="hero__eyebrow">ศูนย์บริการตัวอย่าง · คู่มือบริการ</p>
         <h1>ถามคู่มือ</h1>
         <p className="hero__lead">
-          พิมพ์คำถามเกี่ยวกับศูนย์บริการตัวอย่าง แอปจะค้นคู่มือฉบับที่ใช้งานอยู่
-          แล้วตอบพร้อมแหล่งอ้างอิง ถ้าคู่มือไม่มีคำตอบ แอปจะบอกว่าไม่มีข้อมูลแทนการเดา
+          พิมพ์คำถามเกี่ยวกับศูนย์บริการตัวอย่าง ระบบจะค้นคู่มือฉบับที่ใช้งานอยู่
+          แล้วตอบพร้อมแหล่งอ้างอิง ถ้าคู่มือไม่มีคำตอบ ระบบจะบอกว่าไม่มีข้อมูลแทนการเดา
         </p>
       </section>
 
@@ -51,19 +55,26 @@ export default async function HomePage() {
 
       {freshness.stale ? (
         <div className="notice notice--warn" style={{ marginBottom: "2rem" }}>
-          <div className="notice__title">คู่มือฉบับล่าสุดยังไม่ถูกใช้ตอบ</div>
+          <div className="notice__title">คู่มือฉบับใหม่ยังไม่ถูกใช้ตอบ</div>
           <p className="small">
-            ระบบลงทะเบียน <span className="mono">{freshness.latestDocKey}</span> แล้ว แต่ยังตอบจาก{" "}
-            <span className="mono">{freshness.activeDocKey}</span> — ถ้าคำตอบเรื่องเวลาเปิด–ปิดไม่ตรง
-            ให้เปิดคู่มือฉบับล่าสุดหรือแจ้งผู้ดูแลระบบ
+            มี{handbookLabel(freshness.latestDocKey)}
+            {latestDoc
+              ? ` (มีผล ${formatThaiDate(`${latestDoc.effective_date}T00:00:00+07:00`)})`
+              : ""}{" "}
+            แล้ว แต่ระบบยังตอบจาก{handbookLabel(freshness.activeDocKey)} —
+            ถ้าคำตอบเรื่องเวลาเปิด–ปิดไม่ตรง ให้เปิดฉบับล่าสุดหรือแจ้งเจ้าหน้าที่
           </p>
           <p className="row small" style={{ marginTop: "0.6rem", gap: "0.6rem" }}>
-            <Link className="button button--ghost button--sm" href={`/handbook/${freshness.latestDocKey}#s2-1`} prefetch={false}>
+            <Link
+              className="button button--ghost button--sm"
+              href={`/handbook/${freshness.latestDocKey}#s2-1`}
+              prefetch={false}
+            >
               เปิดคู่มือฉบับล่าสุด
             </Link>
             {isAdmin ? (
               <Link className="button button--quiet button--sm" href="/admin/demo">
-                สร้างและเปิดใช้ดัชนีใหม่
+                ไปหน้ากำหนดค่าคู่มือ
               </Link>
             ) : null}
           </p>
@@ -72,30 +83,23 @@ export default async function HomePage() {
 
       {!active?.index ? (
         <div className="notice notice--danger" style={{ marginBottom: "2rem" }}>
-          <div className="notice__title">ยังไม่มีดัชนีคู่มือที่เปิดใช้งาน</div>
+          <div className="notice__title">ยังไม่มีคู่มือที่เปิดใช้งาน</div>
           <p className="small">
-            ฐานข้อมูลนี้ยังไม่พร้อมตอบคำถาม ผู้ดูแลระบบต้องรัน <span className="mono">npm run demo:seed</span>{" "}
-            แล้วเลือกสถานการณ์ในหน้า <Link href="/admin/demo">หน้าควบคุม</Link>
+            ระบบยังไม่พร้อมตอบคำถาม ผู้ดูแลระบบต้องนำเข้าคู่มือและเปิดใช้ก่อน
+            จากนั้นจึงใช้งานหน้านี้ได้
           </p>
         </div>
       ) : null}
 
       <div className="stack stack-lg">
         <div>
-          {quota ? (
-            <div
-              className="env-strip"
-              style={{ borderTop: 0, paddingBottom: "0.85rem", justifyContent: "flex-start" }}
-            >
-              <span>โควตาวันนี้</span>
-              <span className="env-strip__sep">/</span>
-              <span>
-                ใช้ไป {quota.used} จาก {quota.limit} ครั้ง
-                {quota.remaining <= 1 ? ` · เหลือ ${quota.remaining} ครั้ง` : ""}
-              </span>
-              <span className="env-strip__sep">/</span>
-              <span>เริ่มใหม่ {formatThaiDateTime(quota.resetAt)}</span>
-            </div>
+          {quotaIsTight && quota ? (
+            <p className="quota-note" role="status">
+              {quota.remaining === 0
+                ? `ใช้คำถามครบ ${quota.limit} ครั้งสำหรับวันนี้แล้ว`
+                : `เหลือคำถามอีก ${quota.remaining} ครั้งสำหรับวันนี้`}
+              <span className="faint"> · เริ่มใหม่ {formatThaiDateTime(quota.resetAt)}</span>
+            </p>
           ) : null}
 
           <QuestionForm
@@ -108,17 +112,15 @@ export default async function HomePage() {
 
         <div className="grid-2">
           <section className="card" style={{ border: 0 }}>
-            <div className="card__kicker">คู่มือที่ใช้งานอยู่</div>
+            <div className="card__kicker">คู่มือบริการ</div>
             <h2 style={{ marginTop: "0.5rem" }}>
               {activeDoc?.title ?? "ยังไม่มีคู่มือที่เปิดใช้"}
             </h2>
             {activeDoc ? (
               <div className="small muted" style={{ marginTop: "0.5rem" }}>
+                <p>มีผลตั้งแต่ {formatThaiDate(`${activeDoc.effective_date}T00:00:00+07:00`)}</p>
                 <p>
-                  ฉบับ {activeDoc.id} · มีผล {formatThaiDate(`${activeDoc.effective_date}T00:00:00+07:00`)}
-                </p>
-                <p>
-                  ดัชนี {active?.index?.indexKey} · {activeDoc.sections.length} ข้อ
+                  {activeDoc.sections.length} ข้อ · ระบบตอบจากฉบับนี้
                 </p>
               </div>
             ) : (
@@ -126,7 +128,7 @@ export default async function HomePage() {
             )}
             <div className="row" style={{ marginTop: "1.1rem" }}>
               <Link className="button button--ghost" href={handbookHref} prefetch={false}>
-                อ่านคู่มือฉบับเต็ม
+                อ่านคู่มือ
               </Link>
               {activeDoc ? (
                 <Link
@@ -155,10 +157,17 @@ export default async function HomePage() {
         </div>
 
         <p className="tiny faint">
-          ผู้รับผิดชอบระบบ: ทีมการสอน (สมมติ) · แจ้งคำตอบผิดได้จากปุ่ม “ต้องแก้ไข” ใต้คำตอบ ·
-          ช่องทางแจ้งเหตุคือหน้าควบคุมของผู้ดูแลระบบ
+          พบคำตอบไม่ตรงกับคู่มือ? กด “ต้องแก้ไข” ใต้คำตอบ หรือติดต่อศูนย์ผ่านแบบฟอร์มในแอป
         </p>
       </div>
     </div>
   );
+}
+
+function safeDocument(docKey: string) {
+  try {
+    return getCanonicalDocument(docKey);
+  } catch {
+    return null;
+  }
 }

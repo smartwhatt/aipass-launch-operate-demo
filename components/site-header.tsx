@@ -7,9 +7,9 @@ import { LogoutButton } from "@/components/logout-button";
 /**
  * Site header.
  *
- * Two rows: the teaching identity, then the environment strip that the lesson
- * refers to (Local / Preview / Production, app version, handbook and index,
- * fixture or live mode).
+ * Learner-facing: the service name, the tasks, and the account. The
+ * environment tag appears only outside Local, and the technical status line
+ * lives in the footer and on /about.
  */
 export function SiteHeader({
   viewer,
@@ -21,52 +21,43 @@ export function SiteHeader({
   active: ActiveContext | null;
 }) {
   const envLabel =
-    config.APP_ENV === "preview" ? "Preview" : config.APP_ENV === "production" ? "Production" : "Local";
-  const handbook = active?.index?.docKey ?? config.DOCS_VERSION;
-  const index = active?.index?.indexKey ?? config.INDEX_VERSION;
+    config.APP_ENV === "preview"
+      ? "Preview"
+      : config.APP_ENV === "production"
+        ? "Production"
+        : null;
+  const handbookHref = `/handbook/${active?.index?.docKey ?? config.DOCS_VERSION}`;
   const isAdmin = viewer?.role === "admin";
 
   return (
     <header className="site-header">
       <div className="page">
         <div className="site-header__top">
-          <Link href="/" className="brand" aria-label="ถามคู่มือ — ศูนย์บริการตัวอย่าง">
-            <span className="brand__mark">ถามคู่มือ</span>
-            <span className="brand__sub">ศูนย์บริการตัวอย่าง</span>
-          </Link>
+          <div className="brand-row">
+            <Link href="/" className="brand" aria-label="ถามคู่มือ — ศูนย์บริการตัวอย่าง">
+              <span className="brand__mark">ถามคู่มือ</span>
+              <span className="brand__sub">ศูนย์บริการตัวอย่าง</span>
+            </Link>
+            {envLabel ? <span className="env-tag">{envLabel}</span> : null}
+            <span className="badge header-fictional">ข้อมูลสมมติสำหรับการเรียน</span>
+          </div>
 
           <nav className="header-nav" aria-label="เมนูหลัก">
-            <Link href="/handbook/docs-v1" prefetch={false}>
-              คู่มือ
+            <Link href="/">ถามคำตอบ</Link>
+            <Link href={handbookHref} prefetch={false}>
+              คู่มือบริการ
             </Link>
-            <Link href="/calculator">คำนวณต้นทุน</Link>
-            {isAdmin ? <Link href="/admin/demo">หน้าควบคุม</Link> : null}
+            <Link href="/about">เกี่ยวกับ</Link>
+            {isAdmin ? <Link href="/admin/demo">สำหรับผู้สอน</Link> : null}
             {viewer ? (
               <>
-                <span className="faint small viewer-name">
-                  {viewer.displayName}
-                </span>
+                <span className="faint small viewer-name">{viewer.displayName}</span>
                 <LogoutButton />
               </>
             ) : (
               <Link href="/login">เข้าสู่ระบบ</Link>
             )}
           </nav>
-        </div>
-
-        <div className="env-strip" aria-label="สภาพแวดล้อมของระบบ">
-          <span>{envLabel}</span>
-          <span className="env-strip__sep">/</span>
-          <span>v{config.APP_VERSION}</span>
-          <span className="env-strip__sep">/</span>
-          <span>
-            {handbook} · {index}
-          </span>
-          <span className="env-strip__sep">/</span>
-          <span>{config.AI_MODE === "fixture" ? "Fixture mode" : "Live mode"}</span>
-          <span className="badge" style={{ marginLeft: "auto" }}>
-            ข้อมูลสมมติสำหรับการเรียน
-          </span>
         </div>
       </div>
     </header>

@@ -28,7 +28,7 @@ export function IncidentBanner({
       <p className="small muted" style={{ marginTop: "0.4rem" }}>
         ใช้คู่มือฉบับที่ตรวจสอบแล้วแทน:{" "}
         <Link href={checkedHandbookHref} prefetch={false}>
-          เปิดข้อ 2.1 ของคู่มือฉบับล่าสุด
+          อ่านข้อ 2.1 ในคู่มือฉบับล่าสุด
         </Link>
       </p>
       <p className="tiny faint" style={{ marginTop: "0.5rem" }}>

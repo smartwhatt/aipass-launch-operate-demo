@@ -1172,3 +1172,123 @@ button {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Learner-facing polish: the header carries the service, not the deployment.
+--------------------------------------------------------------------------- */
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.env-tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--line-2);
+  border-radius: 2px;
+  color: var(--ink-2);
+}
+
+.header-fictional {
+  font-size: 0.7rem;
+}
+
+.quota-note {
+  margin: 0 0 0.9rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--line-2);
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.1rem;
+}
+
+.footer-brand {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 0.4rem 1.1rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+
+.footer-nav a {
+  text-decoration: none;
+  color: var(--ink-2);
+  border-bottom: 1px solid transparent;
+}
+
+.footer-nav a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.status-line {
+  margin: 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-3);
+}
+
+@media (max-width: 560px) {
+  .header-fictional {
+    display: none;
+  }
+
+  .footer-top {
+    display: block;
+  }
+
+  .footer-nav {
+    margin-top: 0.75rem;
+  }
+}
+
+.roles {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.roles__row {
+  display: grid;
+  gap: 0.05rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.roles__row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.roles dt {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.roles dd {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}

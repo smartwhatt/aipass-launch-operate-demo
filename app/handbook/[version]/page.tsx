@@ -7,7 +7,7 @@ import {
   getCanonicalDocument,
   sectionAnchor,
 } from "@/lib/retrieval/canonical";
-import { formatThaiDate } from "@/lib/format";
+import { formatThaiDate, handbookEditionLabel } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -53,7 +53,7 @@ export default async function HandbookPage({
             </p>
             <h1 style={{ fontSize: "1.8rem" }}>{doc.title}</h1>
             <p className="small muted" style={{ marginTop: "0.4rem" }}>
-              ฉบับ <span className="mono">{doc.id}</span> · มีผลตั้งแต่{" "}
+              {handbookEditionLabel(doc.id)} · มีผลตั้งแต่{" "}
               {formatThaiDate(`${doc.effective_date}T00:00:00+07:00`)}
             </p>
           </div>
@@ -61,7 +61,7 @@ export default async function HandbookPage({
         </div>
 
         <div className="row small">
-          <span className="faint">ฉบับ:</span>
+          <span className="faint">เลือกฉบับ:</span>
           {DOCUMENT_KEYS.map((key) => (
             <Link
               key={key}
@@ -73,8 +73,9 @@ export default async function HandbookPage({
                   ? { borderColor: "var(--ink)", color: "var(--ink)" }
                   : undefined
               }
+              aria-current={key === version ? "page" : undefined}
             >
-              {key}
+              {handbookEditionLabel(key)}
             </Link>
           ))}
         </div>
@@ -84,19 +85,19 @@ export default async function HandbookPage({
             {isServed
               ? "ระบบกำลังตอบคำถามจากคู่มือฉบับนี้"
               : registered
-                ? "ฉบับนี้ลงทะเบียนแล้ว แต่ยังไม่ได้เปิดใช้ดัชนี"
-                : "ฉบับนี้ยังไม่ถูกลงทะเบียนในระบบ"}
+                ? "ฉบับนี้ยังไม่ถูกใช้ตอบ"
+                : "ฉบับนี้ยังไม่มีในระบบ"}
           </div>
           <p className="small muted">
             {isServed
-              ? `ดัชนีที่ใช้งานอยู่คือ ${active?.index?.indexKey} ซึ่งสร้างจาก ${doc.id}`
+              ? `คำตอบและแหล่งอ้างอิงในหน้าถามคำตอบมาจากฉบับนี้`
               : registered
-                ? `ดัชนีที่ใช้งานอยู่คือ ${active?.index?.indexKey ?? "ไม่มี"} (สร้างจาก ${active?.index?.docKey ?? "ไม่มี"}) ต้องสร้างและเปิดใช้ดัชนีใหม่ก่อนระบบจะตอบจากฉบับนี้`
-                : `ดัชนีที่ใช้งานอยู่คือ ${active?.index?.indexKey ?? "ไม่มี"} และรายการเอกสารยังไม่มีฉบับนี้`}
+                ? `ระบบยังตอบจาก${handbookEditionLabel(active?.index?.docKey)} ต้องเปิดใช้ฉบับนี้ก่อน คำตอบใหม่จึงจะมาจากฉบับนี้`
+                : `ระบบยังไม่มีฉบับนี้ในรายการคู่มือที่ใช้งานได้`}
           </p>
           {viewer.role === "admin" ? (
             <p className="tiny faint" style={{ marginTop: "0.4rem" }}>
-              เปลี่ยนดัชนีที่ใช้งานได้ที่ <Link href="/admin/demo">หน้าควบคุม</Link>
+              เปิดใช้ฉบับนี้ได้ที่ <Link href="/admin/demo">หน้าสำหรับผู้สอน</Link>
             </p>
           ) : null}
         </div>
@@ -109,9 +110,6 @@ export default async function HandbookPage({
                 <h2 style={{ fontSize: "1.05rem" }}>{section.title}</h2>
               </div>
               <p style={{ marginTop: "0.7rem", lineHeight: 1.85 }}>{section.text}</p>
-              <p className="tiny faint" style={{ marginTop: "0.6rem" }}>
-                ที่อยู่อ้างอิง: <span className="mono">/handbook/{doc.id}#{sectionAnchor(section.id)}</span>
-              </p>
             </section>
           ))}
         </div>

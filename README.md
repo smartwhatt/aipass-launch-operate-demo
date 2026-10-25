@@ -137,6 +137,10 @@ artifacts/      generated evidence (gitignored)
   the same remaining budget.
 - **Citations are built by the server.** The model may choose a section ID from
   the retrieved set, never a URL.
+- **Learner screens speak about editions, not keys.** Citations read
+  "คู่มือฉบับที่ 1 ข้อ 2.1". Internal keys (`docs-v1`, `index-v1`), the
+  environment, and the model live in the footer status line, `/about`, the
+  trace viewer, and the admin screens. Keep that split when you edit the UI.
 - **v1.0.1 adds a handbook-freshness notice.** When a newer document is
   registered but not active, the home page says so before a learner sees an old
   answer. That is the reviewer-visible change between the two app tags.

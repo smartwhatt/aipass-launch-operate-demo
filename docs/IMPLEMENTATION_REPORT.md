@@ -93,6 +93,21 @@ for the newest registered handbook, so the answer card's button does not send a
 learner back to the stale version. An integration test and an E2E test cover it.
 Endpoint behavior and stable IDs are unchanged.
 
+## Learner interface wording pass
+
+`main` carries a wording pass that came after the `app-v1.0.1` cut. It moves the
+deployment detail (environment, app version, internal document and index keys,
+prompt, model) out of the header and out of the answer card, into a muted footer
+status line and a new `/about` page. Learner screens use edition names
+("คู่มือฉบับที่ 1 ข้อ 2.1") and the answer card shows `ข้อมูลจำลอง` plus the
+edition. The API payload, citations, trace viewer, and admin screens keep the
+full identifiers, so the teaching evidence is unchanged. The Playwright suite
+covers the new labels and the mobile layout.
+
+The tags still point at the earlier wording. Re-cut both application tags, or
+cut a new patch tag, before distributing the course, so every episode shows the
+same interface.
+
 ## Video coverage
 
 [docs/VIDEO_RESULTS.md](VIDEO_RESULTS.md) gives one result for each of the 40

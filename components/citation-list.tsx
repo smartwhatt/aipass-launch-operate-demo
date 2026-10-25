@@ -1,10 +1,11 @@
 import Link from "next/link";
 import type { Citation } from "@/lib/domain/types";
+import { handbookLabel } from "@/lib/format";
 
 /**
  * Citations.
  *
- * Each citation names the document version and section in text, so the
+ * Each citation names the handbook edition and section in text, so the
  * reference is readable without relying on colour. The URL was built by the
  * server from a known section.
  */
@@ -23,8 +24,8 @@ export function CitationList({ citations }: { citations: Citation[] }) {
             <div>
               <div className="citation__label">
                 {citation.sectionTitle}{" "}
-                <span className="faint mono">
-                  · {citation.version} ข้อ {citation.sectionId}
+                <span className="faint">
+                  · {handbookLabel(citation.version)} ข้อ {citation.sectionId}
                 </span>
               </div>
               <p className="citation__excerpt">“{citation.excerpt}”</p>

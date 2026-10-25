@@ -149,7 +149,8 @@ export async function runAnswer(input: AnswerServiceInput): Promise<AnswerOutcom
       explanation:
         input.incident?.message ??
         "ปิดการตอบอัตโนมัติเฉพาะเรื่องเวลาเปิด–ปิด จนกว่าจะเปิดใช้ดัชนีที่สร้างจากคู่มือฉบับใหม่",
-      nextAction: "เปิดคู่มือฉบับที่ตรวจสอบแล้ว (docs-v2 ข้อ 2.1) หรือติดต่อศูนย์ ระบบจะกลับมาตอบอัตโนมัติเมื่อแก้ไขเสร็จ",
+      nextAction:
+        "เปิดคู่มือฉบับที่ตรวจสอบแล้ว ข้อ 2.1 หรือติดต่อศูนย์ ระบบจะกลับมาตอบอัตโนมัติเมื่อแก้ไขเสร็จ",
       fallbackUrl: input.fallbackUrl,
       retryAt: input.incident?.nextUpdateAt ?? null,
       totalLatencyMs: Math.round(performance.now() - startedAt),

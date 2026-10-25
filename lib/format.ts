@@ -87,3 +87,34 @@ export const ROLE_LABELS: Record<string, string> = {
   pilot: "ผู้ใช้ทดลองนำร่อง",
   outsider: "ผู้ใช้ภายนอก",
 };
+
+/* --- Handbook labels -------------------------------------------------------
+   Learner screens use edition names, not internal keys. The keys stay in the
+   URL, the API payload, the trace viewer, and the admin screens, where the
+   course teaches them.
+--------------------------------------------------------------------------- */
+
+export function handbookEdition(docKey: string | null | undefined): number | null {
+  if (!docKey) return null;
+  const match = /-v(\d+)$/.exec(docKey);
+  return match ? Number(match[1]) : null;
+}
+
+export function handbookLabel(docKey: string | null | undefined): string {
+  const edition = handbookEdition(docKey);
+  return edition ? `คู่มือฉบับที่ ${edition}` : (docKey ?? "คู่มือ");
+}
+
+/** "คู่มือฉบับที่ 1 · มีผล 1 ตุลาคม 2569" */
+export function handbookLabelWithDate(
+  docKey: string | null | undefined,
+  effectiveDate: string | null | undefined,
+): string {
+  if (!effectiveDate) return handbookLabel(docKey);
+  return `${handbookLabel(docKey)} · มีผล ${formatThaiDate(`${effectiveDate}T00:00:00+07:00`)}`;
+}
+
+export function handbookEditionLabel(docKey: string | null | undefined): string {
+  const edition = handbookEdition(docKey);
+  return edition ? `ฉบับที่ ${edition}` : (docKey ?? "ไม่ระบุฉบับ");
+}

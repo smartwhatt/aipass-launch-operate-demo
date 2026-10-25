@@ -11,7 +11,10 @@ mkdirSync(SHOTS, { recursive: true });
  * The page must not scroll sideways and the form must stay usable.
  */
 test("home fits 360 px without horizontal overflow", async ({ page }) => {
-  await login(page, "pilot");
+  // The admin layout carries one extra nav item, so it is the stricter width
+  // test. It also keeps the pilot account under the 5-per-60-seconds limit for
+  // the other specs.
+  await login(page, "admin");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
